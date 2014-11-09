@@ -1,4 +1,4 @@
-## HistoryMiami Hackathon Project
+## HistoryMiami Hackathon (Hypermiami)
 
 ## Motivation
 Magazine-inspired searchable and editable image feed. Uses Firebase for storage and auth capabilities.
@@ -10,7 +10,6 @@ Winner of [Recoding History Hackathon](http://www.downtownmiami.com/article/1014
 * PHP (for data scraping and search cache)
 
 ## Contributors
-Leo Succar-Ferre (front-end)
-Paul Burakov (back-end)
-
+* Leo Succar-Ferre (front-end)
+* Paul Burakov (back-end)
 November 8-9 2014, Miami
