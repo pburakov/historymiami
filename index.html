@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="historymiami">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HyperMiami</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/lightbox.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js" type="text/javascript"></script>
+    <script src="https://cdn.firebase.com/js/client/1.0.21/firebase.js" type="text/javascript"></script>
+    <script src="https://cdn.firebase.com/js/simple-login/1.6.3/firebase-simple-login.js"
+            type="text/javascript"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/0.8.2/angularfire.min.js" type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-filter/0.4.9/angular-filter.js"
+            type="text/javascript"></script>
+
+    <script src="js/scripts.js" type="text/javascript"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body ng-controller="authController">
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">HyperMiami</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search" ng-model="search">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-hide="auth.user">
+                    <button type="button" class="btn btn-default navbar-btn" ng-click="auth.$login('facebook')">Login
+                    </button>
+                </li>
+                <li ng-show="auth.user"><span class="navbar-text">Hello, {{auth.user.displayName}}</span>
+                    <button type="button" class="btn navbar-btn" ng-click="auth.$logout()">Logout</button>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid">
+
+    <div class="jumbotron">
+        <!-- <img src="http://historymiamiarchives.org/guides/index.php?p=digitallibrary/getfile&id=1331&preview=long" style="width:100%"> -->
+        <h1>HistoryMiami</h1>
+    </div>
+
+    <div class="row" ng-controller="imagesDB">
+        <div infinite-scroll='pagerFunction()'>
+            <ul class="list-unstyled">
+                <li class="item" ng-repeat="img in images | orderBy:Title:true | filter:search">
+                    <div class="well">
+                        <div class="thumbnail">
+
+                            <a href="{{img.url}}" data-lightbox="image-1" data-title="{{img.Title}}"><img
+                                    src="{{img.url}}" alt="..."></a>
+
+                            <div class="caption">
+
+                                <div ng-hide="toggleEdit">
+                                    <h3>{{img.Title}}</h3>
+                                    <dl class="dl-horizontal">
+                                        <dt>Creators:</dt>
+                                        <dd>{{img.Creators}}</dd>
+                                        <dt>Date:</dt>
+                                        <dd>{{img.Date}}</dd>
+                                        <dt>Repository:</dt>
+                                        <dd>{{img.Repository}}</dd>
+                                        <dt>Subjects:</dt>
+                                        <dd>{{img.Subjects}}</dd>
+                                        <dt>Tags:</dt>
+                                        <dd>
+                                            <ul class="nav nav-pills">
+                                                <li>
+                                                    <button type="button" class="btn btn-default btn-xs">Munroe</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="btn btn-default btn-xs">Tuttle</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="btn btn-default btn-xs">1890</button>
+                                                </li>
+                                            </ul>
+                                        </dd>
+                                    </dl>
+                                </div>
+
+                                <div ng-show="toggleEdit">
+                                    <h3><input type="text" ng-model="img.Title" ng-change="images.$save(img)"></h3>
+                                    <dl class="dl-horizontal">
+                                        <dt>Creators:</dt>
+                                        <dd><input type="text" ng-model="img.Creators" ng-change="images.$save(img)">
+                                        </dd>
+                                        <dt>Date:</dt>
+                                        <dd><input type="text" ng-model="img.Date" ng-change="images.$save(img)"></dd>
+                                        <dt>Repository:</dt>
+                                        <dd><input type="text" ng-model="img.Repository" ng-change="images.$save(img)">
+                                        </dd>
+                                        <dt>Subjects:</dt>
+                                        <dd><input type="text" ng-model="img.Subjects" ng-change="images.$save(img)">
+                                        </dd>
+                                        <dt>Tags:</dt>
+                                        <dd><input type="text" placeholder="Add Tags"></dd>
+                                        <dd>
+                                            <ul class="nav nav-pills">
+                                                <li>
+                                                    <button type="button" class="btn btn-default btn-xs">Munroe</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="btn btn-default btn-xs">Tuttle</button>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="btn btn-default btn-xs">1890</button>
+                                                </li>
+                                            </ul>
+                                        </dd>
+                                    </dl>
+                                </div>
+
+                                <div class="text-right">
+                                    <button href="#" class="btn btn-default btn-sml" role="button" ng-show="auth.user"
+                                            ng-click="toggleEdit = !toggleEdit"><span
+                                            class="glyphicon glyphicon-pencil"></span> Edit
+                                    </button>
+
+                                    <button href="#" class="btn btn-success btn-sml" role="button1" data-toggle="modal"
+                                            data-target="#buyModal"><span
+                                            class="glyphicon glyphicon-shopping-cart"></span> Buy Print
+                                    </button>
+
+                                    <button href="#" class="btn btn-primary btn-sml" role="button2" data-toggle="modal"
+                                            data-target="#shareModal"><span
+                                            class="glyphicon glyphicon-share-alt"></span> Share
+                                    </button>
+                                </div>
+
+                                <!-- Large Image Modal -->
+                                <div class="modal fade bs-example-modal-lg" id="imageModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <img src="{{img.url}}" class="img-responsive width-100" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Buy Modal -->
+                                <div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"><span
+                                                        aria-hidden="true">&times;</span><span
+                                                        class="sr-only">Close</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">Buy This Print</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="container-fluid">
+
+                                                    <div class="col-md-4">
+                                                        <div class="thumbnail no-margin">
+                                                            <img src="{{img.url}}" alt="...">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-8">
+                                                        <!-- Twitter -->
+                                                        <a href="http://twitter.com/home?status="
+                                                           title="Share on Twitter" target="_blank"
+                                                           class="btn btn-default twitter">Twitter</a>
+                                                        <!-- Facebook -->
+                                                        <a href="https://www.facebook.com/sharer/sharer.php?u="
+                                                           title="Share on Facebook" target="_blank"
+                                                           class="btn btn-default facebook">Facebook</a>
+                                                        <!-- Google+ -->
+                                                        <a href="https://plus.google.com/share?url="
+                                                           title="Share on Google+" target="_blank"
+                                                           class="btn btn-default google">Google+</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <!-- <div class="modal-footer">
+                                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                              <button type="button" class="btn btn-primary">Save</button>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Share Modal -->
+                                <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"><span
+                                                        aria-hidden="true">&times;</span><span
+                                                        class="sr-only">Close</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">Share this Image</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="container-fluid">
+
+                                                    <div class="col-md-4">
+                                                        <div class="thumbnail no-margin">
+                                                            <img src="{{img.url}}" alt="...">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-8">
+                                                        <!-- Twitter -->
+                                                        <a href="http://twitter.com/home?status="
+                                                           title="Share on Twitter" target="_blank"
+                                                           class="btn btn-default twitter">Twitter</a>
+                                                        <!-- Facebook -->
+                                                        <a href="https://www.facebook.com/sharer/sharer.php?u="
+                                                           title="Share on Facebook" target="_blank"
+                                                           class="btn btn-default facebook">Facebook</a>
+                                                        <!-- Google+ -->
+                                                        <a href="https://plus.google.com/share?url="
+                                                           title="Share on Google+" target="_blank"
+                                                           class="btn btn-default google">Google+</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <!-- <div class="modal-footer">
+                                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                              <button type="button" class="btn btn-primary">Save</button>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+
+<script src="js/bootstrap.min.js"></script>
+<script src="js/lightbox.min.js"></script>
+
+</body>
+</html>

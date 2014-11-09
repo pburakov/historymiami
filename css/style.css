@@ -1,0 +1,79 @@
+h3 {
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+input {
+	width: 100%;
+}
+
+.container-fluid {
+	margin-right: 15px;
+	margin-left: 15px;
+}
+
+.row {
+	margin-top: 1em;
+}
+
+.no-margin {
+	margin: 0;
+}
+
+.width-100 {
+	width: 100%;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.dl-horizontal dd {
+	margin-bottom: 10px;
+}
+
+@media (min-width: 768px) {
+	.dl-horizontal dt {
+		width: 100px;
+	}
+
+	.dl-horizontal dd {
+		margin-left: 120px;
+	}
+}
+
+*, *:before, *:after {box-sizing:  border-box !important;}
+
+
+.row {
+ -moz-column-width: 24em;
+ -webkit-column-width: 24em;
+ -moz-column-gap: 1em;
+ -webkit-column-gap:1em; 
+}
+
+.item {
+ display: inline-block;
+ width:  100%; 
+}
+
+.well {
+ position:relative;
+ display: block;
+ padding: 0;
+ border:0;
+}
+
+.jumbotron {
+	background: url('http://historymiamiarchives.org/guides/index.php?p=digitallibrary/getfile&id=1331&preview=long') no-repeat center -20px fixed;
+    background-size: cover;
+    margin-top: 80px;
+}
+
+.jumbotron h1 {
+	margin: 50px 0 40px 30px;
+	text-shadow: 1px 1px 24px #000000;
+	position: relative;
+	top: 60px;
+	color: white;
+}
