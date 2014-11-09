@@ -12,4 +12,5 @@ Winner of [Recoding History Hackathon](http://www.downtownmiami.com/article/1014
 ## Contributors
 * Leo Succar-Ferre (front-end)
 * Paul Burakov (back-end)
+
 November 8-9 2014, Miami
